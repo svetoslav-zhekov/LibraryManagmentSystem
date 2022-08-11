@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.BookSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Books"
+             xmlns:enumbinder="clr-namespace:LibraryManagmentSystem.Extensions"
+             xmlns:enum="clr-namespace:LibraryManagmentSystem.Models.Books"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.BookSection.CrudBookView"
+             x:DataType="viewmodels:CrudBookViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Add/Remove/Update Book (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Insert Book Form-->
+            <StackLayout Spacing="5" 
+                             VerticalOptions="Center" HorizontalOptions="Center">
+
+                <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Insert Book Form"/>
+
+                <!-- Name -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Name"/>
+                <Entry Text="{Binding InsertedBook.Name}" 
+                           TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter book name here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250"/>
+
+                <!-- Book Type -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Book Type"/>
+                <Picker ItemsSource="{enumbinder:EnumBinding {x:Type enum:BookType}}" 
+                            TextColor="{StaticResource Secondary}" 
+                            SelectedItem="{Binding InsertedBook.TypeOfBook}"
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            WidthRequest="250" />
+
+                <!-- Author -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Author"/>
+                <Entry Text="{Binding InsertedBook.Author}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter author name here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" 
+                           WidthRequest="250"/>
+
+                <!-- Edition -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Edition"/>
+                <Entry Text="{Binding InsertedBook.Edition}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter edition here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" 
+                           WidthRequest="250"/>
+
+                <!-- RackNo -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="RackNo"/>
+                <Entry Text="{Binding InsertedBook.RackNo}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter edition here!" Keyboard="Numeric" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" 
+                           WidthRequest="250"/>
+
+                <Button        
+                        Text="Insert Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding InsertBookCommand}"
+                        HorizontalOptions="Center"/>
+            </StackLayout>
+
+            <!--Delete Book Form-->
+            <StackLayout Spacing="5" VerticalOptions="Center" 
+                         HorizontalOptions="Center" Grid.Column="1">
+
+                <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Delete Book Form"/>
+
+                <SearchBar x:Name="bookSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformBookSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference bookSearch}}"                              
+                               IsEnabled="True" Placeholder="Input book name here!" 
+                               BackgroundColor="{StaticResource Tertiary}"/>
+
+                <!--Showing The Books Already In The Library-->
+                <ListView x:Name="bookSelector" BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Books}"
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  
+                              MinimumWidthRequest="800"
+                              MaximumHeightRequest="400" 
+                              MaximumWidthRequest="800"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding SelectedBook}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type classmodel:Book}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | BookType: {2} | PurchaseDate: {3} | AddedByID: {4} |
+                                                          Author: {5} | IsAvailable: {6} | Edition: {7} | RackNo: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="TypeOfBook"/>
+                                                <Binding Path="DateOfPurchase"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="Author"/>
+                                                <Binding Path="IsAvailable"/>
+                                                <Binding Path="Edition"/>
+                                                <Binding Path="RackNo"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="CenterAndExpand">
+
+                    <Button        
+                        Text="Delete Selected Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding DeleteBookCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button        
+                        Text="Update Selected Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToUpdateCommand}"
+                        HorizontalOptions="Center"/>
+
+                </HorizontalStackLayout>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

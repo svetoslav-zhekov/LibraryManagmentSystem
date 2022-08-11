@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.MemberSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Users.Members"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.MemberSection.MemberSectionView"
+             x:DataType="viewmodels:MemberSectionViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Member Section (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Members-->
+            <StackLayout Spacing="5" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="All Members (Overview)"/>
+
+                <SearchBar x:Name="memberSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformMemberSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference memberSearch}}"                              
+                               IsEnabled="True" Placeholder="Input member name here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                <!--Showing The Members Already In The DB-->
+                <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Members}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="800"
+                              MaximumHeightRequest="400" MaximumWidthRequest="800"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectionMode="None">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type classmodel:Member}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | Address: {2} | PhoneNo: {3} | Type: {4} |
+                                                                  DateAdded: {5} | AddedByID: {6} | NumOfBooks: {7} | MaxNumBooks: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Address"/>
+                                                <Binding Path="PhoneNo"/>
+                                                <Binding Path="TypeOfMember"/>
+                                                <Binding Path="DateAdded"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="NumOfBooksIssued"/>
+                                                <Binding Path="MaxBooksLimit"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" HorizontalOptions="Center">
+                <Label FontSize="20" TextDecorations="Underline" 
+                       Margin="10" TextColor="{StaticResource Secondary}" 
+                       HorizontalOptions="Center" 
+                       Text="Go To Member Operations"/> 
+
+                <HorizontalStackLayout Spacing="10" 
+                                       HorizontalOptions="Center">
+
+                    <Button        
+                        Text="Assign A Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToAssignBookCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button        
+                        Text="Return A Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToReturnBookCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button        
+                        Text="Renew A Membership"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToRenewMembershipCommand}"
+                        HorizontalOptions="Center"/>
+
+                    <Button        
+                        Text="Insert/Delete/Update A Member"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToCrudCommand}"
+                        HorizontalOptions="Center"/>
+
+                </HorizontalStackLayout>
+                
+            </StackLayout>
+
+        </Grid>
+
+    </ScrollView>
+
+
+</ContentPage>

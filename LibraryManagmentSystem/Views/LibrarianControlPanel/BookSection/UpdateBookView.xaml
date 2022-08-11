@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.BookSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Books"
+             xmlns:enumbinder="clr-namespace:LibraryManagmentSystem.Extensions"
+             xmlns:enum="clr-namespace:LibraryManagmentSystem.Models.Books"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.BookSection.UpdateBookView"
+             x:DataType="viewmodels:UpdateBookViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Update Book (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"          
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Book Info -->
+            <Frame BorderColor="{StaticResource Secondary}" 
+                   BackgroundColor="{StaticResource Primary}" 
+                   CornerRadius="10"
+                   Grid.ColumnSpan="2"
+                   HorizontalOptions="Fill" 
+                   VerticalOptions="Fill" 
+                   Padding="15" Margin="5">
+
+                <StackLayout VerticalOptions="Center" 
+                             HorizontalOptions="Center" 
+                             Spacing="10">
+                    <Label FontSize="20" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center"
+                           Text="BookInfo (Pick an option in the update selector to display!)"/>
+                    <BoxView Color="{StaticResource Secondary}" 
+                             HeightRequest="2"
+                             HorizontalOptions="Fill"/>
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="{Binding AllBookInfo}"/>
+                </StackLayout>
+            </Frame>
+
+            <!-- Picker Selector -->          
+                <StackLayout Spacing="15"
+                             Grid.Row="1"
+                             VerticalOptions="Start" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Select What To Update"/>
+
+                    <Picker HorizontalTextAlignment="Center" 
+                            TextColor="{StaticResource Secondary}" 
+                            HorizontalOptions="Center" 
+                            SelectedItem="{Binding InfoToChange}" 
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            WidthRequest="200">
+
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Name</x:String>
+                                <x:String>Book Type</x:String>
+                                <x:String>Author</x:String>
+                                <x:String>Edition</x:String>
+                                <x:String>Rack Number</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+
+                    </Picker>
+
+                </StackLayout>
+
+                <!--Update Book Form-->
+                <!-- Elements Change Visability Depending On The Binding In The ViewModel -->
+            <StackLayout Spacing="5"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             VerticalOptions="Start" 
+                             HorizontalOptions="Center">
+
+                <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Margin="10" 
+                           Text="Enter/Select New Info"/>
+
+                <!-- Name -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           IsVisible="{Binding NameVisible}" 
+                           Text="Name"/>
+                <Entry Text="{Binding SentBook.Name}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter book name here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250" 
+                           IsVisible="{Binding NameVisible}"/>
+
+                <!-- Book Type -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           IsVisible="{Binding TypeOfBookVisible}"
+                           Text="Book Type"/>
+                <Picker ItemsSource="{enumbinder:EnumBinding {x:Type enum:BookType}}" 
+                            SelectedItem="{Binding SentBook.TypeOfBook}"
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            TextColor="{StaticResource Secondary}" 
+                            WidthRequest="250" 
+                            IsVisible="{Binding TypeOfBookVisible}"/>
+
+                <!-- Author -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           IsVisible="{Binding AuthorVisible}" 
+                           Text="Author"/>
+                <Entry Text="{Binding SentBook.Author}" 
+                           TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter author name here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250" 
+                           IsVisible="{Binding AuthorVisible}"/>
+
+                <!-- Edition -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           IsVisible="{Binding EditionVisible}" 
+                           Text="Edition"/>
+                <Entry Text="{Binding SentBook.Edition}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter edition here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250" 
+                           IsVisible="{Binding EditionVisible}"/>
+
+                <!-- RackNo -->
+                <Label FontSize="15" TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           IsVisible="{Binding RackNoVisible}" 
+                           Text="RackNo"/>
+                <Entry Text="{Binding SentBook.RackNo}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter rack number here!" Keyboard="Numeric" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250" 
+                           IsVisible="{Binding RackNoVisible}"/>
+
+                <Button        
+                        Text="Update Info"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold" IsVisible="{Binding ButtonVisible}"
+                        Command="{Binding UpdateBookCommand}"
+                        HorizontalOptions="Center" Margin="10"/>
+
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel"
+             xmlns:bookcm="clr-namespace:LibraryManagmentSystem.Models.Books"
+             xmlns:membercm="clr-namespace:LibraryManagmentSystem.Models.Users.Members"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.InfoFilterView"
+             x:DataType="viewmodels:InfoFilterViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Search By/Filter By (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}">
+  
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Select A Member Form-->
+                <StackLayout Spacing="5" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Filter By"/>
+
+                    <Picker HorizontalTextAlignment="Center" 
+                            TextColor="{StaticResource Secondary}" 
+                            HorizontalOptions="Center" 
+                            SelectedItem="{Binding MemberSearchBy}" 
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            WidthRequest="200">
+
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Name</x:String>
+                                <x:String>Address</x:String>
+                                <x:String>PhoneNo</x:String>
+                                <x:String>Member Type</x:String>
+                                <x:String>Max Book Limit</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+
+                    </Picker>
+
+
+                    <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="All Members"/>
+
+                    <SearchBar x:Name="memberSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               VerticalOptions="Center" HorizontalOptions="Fill"
+                               SearchCommand="{Binding PerformMemberSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference memberSearch}}"                              
+                               IsEnabled="True" Placeholder="Input to search by here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                    <!--Showing The Members Already In The DB-->
+                    <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Members}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="500"
+                              MaximumHeightRequest="400" MaximumWidthRequest="500"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding SelectedMember}">
+
+                        <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type membercm:Member}">
+                            <ViewCell>
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | Address: {2} | PhoneNo: {3} | Type: {4} |
+                                                                  DateAdded: {5} | AddedByID: {6} | NumOfBooks: {7} | MaxNumBooks: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Address"/>
+                                                <Binding Path="PhoneNo"/>
+                                                <Binding Path="TypeOfMember"/>
+                                                <Binding Path="DateAdded"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="NumOfBooksIssued"/>
+                                                <Binding Path="MaxBooksLimit"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Button 
+                        Text="Display More Info Of Member"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToMoreMemberInfoCommand}"
+                        HorizontalOptions="Center"/>
+
+                </StackLayout>
+
+            <!--Select A Book -->
+            <StackLayout x:Name="secondStack"                       
+                         Spacing="5"
+                         Grid.Column="1"                      
+                         VerticalOptions="Center" 
+                         HorizontalOptions="Center">
+             
+                <Label FontSize="20" 
+                           TextDecorations="Underline"
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Filter By"/>
+
+                <Picker HorizontalTextAlignment="Center" 
+                            TextColor="{StaticResource Secondary}" 
+                            HorizontalOptions="Center" 
+                            SelectedItem="{Binding BookSearchBy}" 
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            WidthRequest="200">
+
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Name</x:String>
+                            <x:String>Book Type</x:String>
+                            <x:String>Author</x:String>
+                            <x:String>Edition</x:String>
+                            <x:String>Rack Number</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+
+                </Picker>
+
+                <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="All Books"/>
+
+                <SearchBar x:Name="bookSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               VerticalOptions="Center" HorizontalOptions="Fill"
+                               SearchCommand="{Binding PerformBookSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference bookSearch}}"                              
+                               IsEnabled="True" Placeholder="Input to search by here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                <!--Showing The Books Already In The Library-->
+                <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Books}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="500"
+                              MaximumHeightRequest="400" MaximumWidthRequest="500"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding SelectedBook}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type bookcm:Book}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | BookType: {2} | PurchaseDate: {3} | AddedByID: {4} |
+                                                          Author: {5} | IsAvailable: {6} | Edition: {7} | RackNo: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="TypeOfBook"/>
+                                                <Binding Path="DateOfPurchase"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="Author"/>
+                                                <Binding Path="IsAvailable"/>
+                                                <Binding Path="Edition"/>
+                                                <Binding Path="RackNo"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button 
+                        Text="Display More Info Of Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToMoreBookInfoCommand}"
+                        HorizontalOptions="Center"/>
+
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

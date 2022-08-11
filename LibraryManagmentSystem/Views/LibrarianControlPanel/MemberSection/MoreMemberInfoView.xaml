@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.MemberSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Users.Members"  
+             xmlns:billclassmodel="clr-namespace:LibraryManagmentSystem.Models.Transactions"  
+             xmlns:membershipenum="clr-namespace:LibraryManagmentSystem.Models.Users.Members.Memberships"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.MemberSection.MoreMemberInfoView"
+             x:DataType="viewmodels:MoreMemberInfoViewModel"
+             Title="{Binding CurrentUserName, StringFormat='More Member Info (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"          
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Spacing="25" 
+                         VerticalOptions="Start" 
+                         HorizontalOptions="Center" 
+                         MaximumWidthRequest="300">
+
+                    <!-- Member Info -->
+                    <Frame BorderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Primary}" 
+                           CornerRadius="10" HorizontalOptions="Fill" 
+                           VerticalOptions="Fill" Padding="15" Margin="5">
+                        <StackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center" 
+                                     Spacing="10">
+                            <Label FontSize="20" 
+                                   TextColor="{StaticResource Secondary}" 
+                                   HorizontalOptions="Center" 
+                                   Text="Member Info"/>
+                            <BoxView Color="{StaticResource Secondary}" 
+                                     HeightRequest="2"
+                                     HorizontalOptions="Fill"/>
+                            <Label FontSize="15" 
+                                   TextColor="{StaticResource Secondary}" 
+                                   HorizontalOptions="Center" 
+                                   Text="{Binding AllMemberInfo}"/>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Membership Info -->
+                    <Frame BorderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Primary}" 
+                           CornerRadius="10" HorizontalOptions="Fill" 
+                           VerticalOptions="Fill" Padding="15" 
+                           Margin="5">
+                        <StackLayout VerticalOptions="Center" 
+                                     HorizontalOptions="Center" 
+                                     Spacing="10">
+                            <Label FontSize="20" 
+                                   TextColor="{StaticResource Secondary}" 
+                                   HorizontalOptions="Center" 
+                                   Text="Current Member's Membership info"/>
+                            <BoxView Color="{StaticResource Secondary}" 
+                                     HeightRequest="2"
+                                     HorizontalOptions="Fill"/>
+                            <Label FontSize="15" 
+                                   TextColor="{StaticResource Secondary}" 
+                                   HorizontalOptions="Center" 
+                                   Text="{Binding AllMemberShipInfo}"/>
+                        </StackLayout>
+                    </Frame>
+
+                </StackLayout>
+
+            <StackLayout Spacing="5" Grid.Column="1" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="All Member Bills"/>
+
+                <!--Showing The Members Bills-->
+                <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding BillsAll}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="800"
+                              MaximumHeightRequest="400" MaximumWidthRequest="800"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectionMode="None">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type billclassmodel:Bill}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | DateOfCreation: {1} |
+                                                          MemberId: {2} | PaidAmount: {3}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="DateOfCreation"/>
+                                                <Binding Path="MemberId"/>
+                                                <Binding Path="PaidAmount"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

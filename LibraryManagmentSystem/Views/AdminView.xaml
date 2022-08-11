@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Users"
+             x:Class="LibraryManagmentSystem.Views.AdminView"
+             x:DataType="viewmodels:AdminViewModel"
+             Title="Admin Panel"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.FlyoutItemIsVisible="False">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+          
+                <!--Insert Librarian Form-->
+                <StackLayout Spacing="5" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Insert Librarian Form"/>
+
+                    <!-- Name -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Name"/>
+                    <Entry Text="{Binding Name}" Placeholder="Enter librarian name here!" 
+                           TextColor="{StaticResource Secondary}" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250"/>
+
+                    <!-- Username -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Username"/>
+                    <Entry Text="{Binding Username}" 
+                           Placeholder="Enter librarian username here!" 
+                           TextColor="{StaticResource Secondary}" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="10" WidthRequest="250"/>
+
+                    <!-- Password -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Password"/>
+                    <Entry Text="{Binding Password}" 
+                           Placeholder="Enter librarian password here!" 
+                           TextColor="{StaticResource Secondary}" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="10" WidthRequest="250" 
+                           IsPassword="True"/>
+
+                    <Button        
+                        Text="Insert Librarian"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding InsertLibrarianCommand}"
+                        HorizontalOptions="Center"/>
+
+                </StackLayout>
+
+                <!--Delete Librarian Form-->
+                <StackLayout Spacing="5" Grid.Column="1"
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Delete Librarian Form"/>
+
+                    <!--Showing The Librarians Already In The Library-->
+                    <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Librarians}" 
+                              VerticalScrollBarVisibility="Always"
+                              MinimumHeightRequest="300" MinimumWidthRequest="500" 
+                              MaximumHeightRequest="300" MaximumWidthRequest="500" 
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding Librarian}">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type classmodel:Librarian}">
+                                <ViewCell>
+                                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                        <Label Text="{Binding Id, StringFormat='Id: {0}'}" 
+                                               TextColor="{StaticResource Secondary}"></Label>
+                                        <Label Text="{Binding Name, StringFormat='Name: {0}'}" 
+                                               TextColor="{StaticResource Secondary}"></Label>
+                                        <Label Text="{Binding Username, StringFormat='Username: {0}'}" 
+                                               TextColor="{StaticResource Secondary}"></Label>
+                                        <Label Text="{Binding Password, StringFormat='Password: {0}'}" 
+                                               TextColor="{StaticResource Secondary}"></Label>
+
+                                    </HorizontalStackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Button      
+                        Text="Delete Selected Librarian"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding DeleteLibrarianCommand}"
+                        HorizontalOptions="Center"/>
+
+                </StackLayout>
+
+            <!--Logout-->
+            <Button 
+                Text="Logout" Scale="1.2" 
+                Grid.Row="1" Grid.ColumnSpan="2"
+                BackgroundColor="{StaticResource Quinary}"
+                TextColor="{StaticResource Secondary}"
+                FontAttributes="Bold" WidthRequest="180" 
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="Center"
+                Command="{Binding LogoutCommand}"/>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

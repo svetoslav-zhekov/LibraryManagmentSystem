@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.BookSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Books"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.BookSection.BookSectionView"
+             x:DataType="viewmodels:BookSectionViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Book Section (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Members-->
+            <StackLayout Spacing="5" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center">
+
+                <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="All Books (Overview)"/>
+
+                <SearchBar x:Name="bookSearch" 
+                               TextColor="{StaticResource Secondary}"
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformBookSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference bookSearch}}"                              
+                               IsEnabled="True"
+                               Placeholder="Input book name here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                <!--Showing The Books Already In The Library-->
+                <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Books}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  
+                              MinimumWidthRequest="800" 
+                              MaximumHeightRequest="400" 
+                              MaximumWidthRequest="800"
+                              VerticalOptions="Center" 
+                              HasUnevenRows="True" 
+                              SelectionMode="None">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type classmodel:Book}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | BookType: {2} | PurchaseDate: {3} | AddedByID: {4} |
+                                                          Author: {5} | IsAvailable: {6} | Edition: {7} | RackNo: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="TypeOfBook"/>
+                                                <Binding Path="DateOfPurchase"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="Author"/>
+                                                <Binding Path="IsAvailable"/>
+                                                <Binding Path="Edition"/>
+                                                <Binding Path="RackNo"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" HorizontalOptions="Center">
+                <Label FontSize="20" 
+                       TextDecorations="Underline" Margin="10" 
+                       TextColor="{StaticResource Secondary}" 
+                       HorizontalOptions="Center" Text="Go To Book Operations"/>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+
+                    <Button        
+                        Text="Insert/Delete/Update A Book"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToAddRemoveCommand}"
+                        HorizontalOptions="Center"/>
+
+                </HorizontalStackLayout>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.BookSection"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.BookSection.MoreBookInfoView"
+             x:DataType="viewmodels:MoreBookInfoViewModel"
+             Title="{Binding CurrentUserName, StringFormat='More Book Info (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"          
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <!-- Member Info -->
+        <Frame  BorderColor="{StaticResource Secondary}" 
+                       BackgroundColor="{StaticResource Primary}" 
+                       CornerRadius="10" VerticalOptions="Fill" 
+                       Padding="15" 
+                       Margin="5">
+
+            <StackLayout VerticalOptions="Center" 
+                                 HorizontalOptions="Center" 
+                                 Spacing="10">
+                <Label FontSize="20" 
+                               TextColor="{StaticResource Secondary}" 
+                               HorizontalOptions="Center" VerticalOptions="Center" Text="Book Info"/>
+                <BoxView Color="{StaticResource Secondary}" 
+                                 HeightRequest="2"
+                                 HorizontalOptions="Fill" VerticalOptions="Center"/>
+                <Label FontSize="15" 
+                               TextColor="{StaticResource Secondary}" 
+                               HorizontalOptions="Center" VerticalOptions="Center" 
+                               Text="{Binding AllBookInfo}"/>
+            </StackLayout>
+        </Frame>
+    </ScrollView>
+
+</ContentPage>

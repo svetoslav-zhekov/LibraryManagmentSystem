@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels"
+             x:Class="LibraryManagmentSystem.Views.LoginView"
+             x:DataType="viewmodels:LoginViewModel"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+    <ScrollView>
+        <VerticalStackLayout 
+            Spacing="20"
+            Margin="20"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="Center">
+
+            <Image Source="librarynamelogosvg.png" 
+                   VerticalOptions="Center" 
+                   MaximumHeightRequest="300" MaximumWidthRequest="500"/>
+
+            <Label FontSize="60" TextDecorations="Underline" 
+                   TextColor="{StaticResource Secondary}" 
+                   HorizontalOptions="Center" Text="Login"/>
+
+            <!--Login Form For The Librarian-->
+            <Label FontSize="20" 
+                   TextColor="{StaticResource Secondary}" 
+                   HorizontalOptions="Center" 
+                   Text="Username"/>
+            <Entry Text="{Binding Username}"
+                   Placeholder="Enter your username here!" 
+                   TextColor="{StaticResource Secondary}"  
+                   PlaceholderColor="{StaticResource Secondary}" 
+                   BackgroundColor="{StaticResource Tertiary}" 
+                   MaxLength="10" Keyboard="Text" 
+                   WidthRequest="200"/>
+
+            <Label FontSize="20" 
+                   TextColor="{StaticResource Secondary}" 
+                   HorizontalOptions="Center" Text="Password"/>
+            <Entry Text="{Binding Password}" 
+                   Placeholder="Enter your password here!" 
+                   TextColor="{StaticResource Secondary}"
+                   PlaceholderColor="{StaticResource Secondary}" 
+                   BackgroundColor="{StaticResource Tertiary}" 
+                   MaxLength="10" WidthRequest="200" 
+                   IsPassword="True"
+                   Keyboard="Text"/>
+
+            <Button 
+                Text="Login"
+                BackgroundColor="{StaticResource Quinary}"
+                TextColor="{StaticResource Secondary}"
+                FontAttributes="Bold"
+                Command="{Binding LoginCommand}"
+                HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

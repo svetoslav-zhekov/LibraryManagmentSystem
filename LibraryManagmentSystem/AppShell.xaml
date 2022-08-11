@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="LibraryManagmentSystem.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:LibraryManagmentSystem.Views"
+    xmlns:membercp="clr-namespace:LibraryManagmentSystem.Views.LibrarianControlPanel.MemberSection"
+    xmlns:bookcp="clr-namespace:LibraryManagmentSystem.Views.LibrarianControlPanel.BookSection"
+    xmlns:librariancp="clr-namespace:LibraryManagmentSystem.Views.LibrarianControlPanel"
+    xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels"
+    xmlns:sys="clr-namespace:System;assembly=netstandard"
+    x:DataType="viewmodels:AppShellViewModel"
+    Shell.TabBarIsVisible="False"
+    Shell.BackgroundColor="{StaticResource Quinary}"
+    Shell.TitleColor="{StaticResource Secondary}"
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutBackgroundColor="{StaticResource Quaternary}">
+    
+    <!--First Startup Page Login-->
+    <ShellContent Shell.FlyoutBehavior="Disabled" 
+                  Shell.FlyoutItemIsVisible="False"
+                  Title="Login" 
+                  ContentTemplate="{DataTemplate local:LoginView}"
+                  Route="LoginView"/>
+    
+    <!-- Admin Control Panel -->
+    <ShellContent Shell.FlyoutBehavior="Disabled" 
+                  Shell.FlyoutItemIsVisible="False"
+                  Title="Admin Panel" 
+                  ContentTemplate="{DataTemplate local:AdminView}"
+                  Route="AdminView"/>
+    
+    <!--Main Menu Flyout Items-->
+    <FlyoutItem Title="Search By/Filter By" 
+                FlyoutDisplayOptions="AsSingleItem" >
+        
+        <ShellContent
+            Title="Search By/Filter By" 
+            ContentTemplate="{DataTemplate librariancp:InfoFilterView}" 
+            Route="InfoFilterView"/>
+        
+    </FlyoutItem>
+    <FlyoutItem Title="Member Section" 
+                FlyoutDisplayOptions="AsSingleItem">
+
+        <ShellContent
+            Title="Member Section" 
+            ContentTemplate="{DataTemplate membercp:MemberSectionView}"
+            Route="MemberSectionView"/>
+
+    </FlyoutItem>
+    <FlyoutItem Title="Book Section" 
+                FlyoutDisplayOptions="AsSingleItem" >
+
+        <ShellContent 
+            Title="Book Section" 
+            ContentTemplate="{DataTemplate bookcp:BookSectionView}" 
+            Route="BookSectionView"/>
+
+    </FlyoutItem>
+
+    <!--Menu Flyout Header-->
+    <Shell.FlyoutHeader>
+        <StackLayout Spacing="10">
+            
+            <Image Source="librarylogosvg.png" 
+                   MaximumHeightRequest="248" 
+                   MaximumWidthRequest="248"/>
+            <Label Text="Menu" Scale="1.5" 
+                   TextColor="{StaticResource Secondary}" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="CenterAndExpand" Margin="15"/>
+            
+        </StackLayout>
+    </Shell.FlyoutHeader>
+    
+    <!--Menu Flyout Footer Is Logout Button-->
+    <Shell.FlyoutFooter>
+        <StackLayout>
+
+            <Button 
+                Text="Logout" Scale="1.2" Margin="10"
+                BackgroundColor="{StaticResource Quinary}"
+                TextColor="{StaticResource Secondary}"
+                FontAttributes="Bold" WidthRequest="180" HorizontalOptions="CenterAndExpand"
+                Command="{Binding LogoutCommand}"/>
+
+            <!-- Display Current Date -->
+            <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"         
+                   HorizontalOptions="Center" 
+                   FontAttributes="Bold" 
+                   Margin="10" 
+                   TextColor="{StaticResource Secondary}" />
+
+        </StackLayout>
+    </Shell.FlyoutFooter>
+</Shell>

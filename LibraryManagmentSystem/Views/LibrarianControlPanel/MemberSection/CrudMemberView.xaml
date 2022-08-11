@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.MemberSection"
+             xmlns:classmodel="clr-namespace:LibraryManagmentSystem.Models.Users.Members"
+             xmlns:enumbinder="clr-namespace:LibraryManagmentSystem.Extensions"
+             xmlns:enum="clr-namespace:LibraryManagmentSystem.Models.Users.Members"
+             xmlns:membershipenum="clr-namespace:LibraryManagmentSystem.Models.Users.Members.Memberships"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.MemberSection.CrudMemberView"
+             x:DataType="viewmodels:CrudMemberViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Insert/Delete/Update Member (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"          
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Insert Member Form-->
+                <StackLayout Spacing="5" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Insert Member Form"/>
+                    
+                    <!-- Name -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Name"/>
+                    <Entry Text="{Binding InsertedMember.Name}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter member name here!" Keyboard="Text" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250"/>
+
+                    <!-- Address -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Address"/>
+                    <Entry Text="{Binding InsertedMember.Address}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter member address here!" Keyboard="Text"
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="20" WidthRequest="250"/>
+
+                    <!-- Phone Number -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Phone Number"/>
+                    <Entry Text="{Binding InsertedMember.PhoneNo}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter member phone number here!" Keyboard="Telephone" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="10" WidthRequest="250"/>
+
+                    <!-- Member Type -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" Text="Member Type"/>
+                    <Picker ItemsSource="{enumbinder:EnumBinding {x:Type enum:MemberType}}" 
+                            SelectedItem="{Binding InsertedMember.TypeOfMember}"
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            TextColor="{StaticResource Secondary}" 
+                            WidthRequest="250" />
+
+                    <!-- Membership -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Membership"/>
+                    <Picker ItemsSource="{enumbinder:EnumBinding {x:Type membershipenum:MembershipType}}" 
+                            SelectedItem="{Binding MemberShipType}"
+                            BackgroundColor="{StaticResource Tertiary}" 
+                            TextColor="{StaticResource Secondary}" 
+                            WidthRequest="250" />
+
+                    <!-- Book Limit -->
+                    <Label FontSize="15" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Max Book Limit"/>
+                    <Entry Text="{Binding InsertedMember.MaxBooksLimit}" TextColor="{StaticResource Secondary}" 
+                           Placeholder="Enter member max book limit here!" Keyboard="Numeric" 
+                           PlaceholderColor="{StaticResource Secondary}" 
+                           BackgroundColor="{StaticResource Tertiary}" 
+                           MaxLength="3" WidthRequest="250"/>
+
+                    <Button        
+                        Text="Insert Member"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding InsertMemberCommand}"
+                        HorizontalOptions="Center"/>
+
+                </StackLayout>
+
+                <!--Delete Member Form-->
+                <StackLayout Spacing="5"
+                             Grid.Column="1"
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" 
+                           TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Member Selection"/>
+
+                    <SearchBar x:Name="memberSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformMemberSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference memberSearch}}"                              
+                               IsEnabled="True" Placeholder="Input member name here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                    <!--Showing The Members Already In The DB-->
+                    <ListView x:Name="memberSelector" BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Members}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="800"
+                              MaximumHeightRequest="400" MaximumWidthRequest="800"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding SelectedMember}">
+                        
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type classmodel:Member}">
+                                <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | Address: {2} | PhoneNo: {3} | Type: {4} |
+                                                                  DateAdded: {5} | AddedByID: {6} | NumOfBooks: {7} | MaxNumBooks: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Address"/>
+                                                <Binding Path="PhoneNo"/>
+                                                <Binding Path="TypeOfMember"/>
+                                                <Binding Path="DateAdded"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="NumOfBooksIssued"/>
+                                                <Binding Path="MaxBooksLimit"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <HorizontalStackLayout Spacing="10" 
+                                           HorizontalOptions="CenterAndExpand">
+                        
+                        <Button        
+                        Text="Delete Selected Member"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding DeleteMemberCommand}"
+                        HorizontalOptions="Center"/>
+
+                        <Button        
+                        Text="Update Selected Member"
+                        BackgroundColor="{StaticResource Quinary}"
+                        TextColor="{StaticResource Secondary}"
+                        FontAttributes="Bold"
+                        Command="{Binding GoToUpdateCommand}"
+                        HorizontalOptions="Center"/>
+                        
+                    </HorizontalStackLayout>
+                    
+                </StackLayout>
+
+        </Grid>
+
+    </ScrollView>
+
+</ContentPage>

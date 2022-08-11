@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:LibraryManagmentSystem.ViewModels.LibrarianControlPanel.MemberSection"
+             xmlns:bookcm="clr-namespace:LibraryManagmentSystem.Models.Books"
+             xmlns:membercm="clr-namespace:LibraryManagmentSystem.Models.Users.Members"
+             x:Class="LibraryManagmentSystem.Views.LibrarianControlPanel.MemberSection.AssignBookView"
+             x:DataType="viewmodels:AssignBookViewModel"
+             Title="{Binding CurrentUserName, StringFormat='Assign Member A Book (Current User: {0})'}"
+             BackgroundColor="{StaticResource Primary}"           
+             Shell.FlyoutBehavior="Disabled">
+
+    <!--Base Layout ScrollView, Enables Scrolling When Content Is Wrapped-->
+    <ScrollView>
+        <Grid VerticalOptions="Center" 
+              HorizontalOptions="Center" 
+              ColumnSpacing="50"
+              RowSpacing="50">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Select A Member Form-->
+                <StackLayout Spacing="5" 
+                             VerticalOptions="Center" 
+                             HorizontalOptions="Center">
+
+                    <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Select The Member"/>
+
+                    <SearchBar x:Name="memberSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformMemberSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference memberSearch}}"                              
+                               IsEnabled="True" Placeholder="Input member name here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                    <!--Showing The Members Already In The DB-->
+                    <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Members}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="500"
+                              MaximumHeightRequest="400" MaximumWidthRequest="500"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding Member}">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type membercm:Member}">
+                                <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | Address: {2} | PhoneNo: {3} | Type: {4} |
+                                                                  DateAdded: {5} | AddedByID: {6} | NumOfBooks: {7} | MaxNumBooks: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="Address"/>
+                                                <Binding Path="PhoneNo"/>
+                                                <Binding Path="TypeOfMember"/>
+                                                <Binding Path="DateAdded"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="NumOfBooksIssued"/>
+                                                <Binding Path="MaxBooksLimit"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+
+                <!--Select A Book To Assign Form-->
+            <StackLayout Spacing="5"
+                         Grid.Column="1"
+                         VerticalOptions="Center" 
+                         HorizontalOptions="Center">
+
+                <Label FontSize="20" TextDecorations="Underline" 
+                           TextColor="{StaticResource Secondary}" 
+                           HorizontalOptions="Center" 
+                           Text="Select A Book To Assign"/>
+
+                <SearchBar x:Name="bookSearch" TextColor="{StaticResource Secondary}" 
+                               PlaceholderColor="{StaticResource Secondary}"
+                               SearchCommand="{Binding PerformBookSearchCommand}" 
+                               SearchCommandParameter="{Binding Text, Source={x:Reference bookSearch}}"                              
+                               IsEnabled="True" Placeholder="Input book name here!" 
+                               BackgroundColor="{StaticResource Tertiary}" />
+
+                <!--Showing The Books Already In The Library-->
+                <ListView BackgroundColor="{StaticResource Tertiary}" 
+                              ItemsSource="{Binding Books}" 
+                              VerticalScrollBarVisibility="Always" 
+                              HorizontalScrollBarVisibility="Always"
+                              MinimumHeightRequest="400"  MinimumWidthRequest="500"
+                              MaximumHeightRequest="400" MaximumWidthRequest="500"
+                              VerticalOptions="Center" HasUnevenRows="True" 
+                              SelectedItem="{Binding Book}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type bookcm:Book}">
+                            <ViewCell>
+                                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                    <!-- Label which has multiple bindings -->
+                                    <Label Margin="5" HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="420">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}Id: {0} | Name: {1} | BookType: {2} | PurchaseDate: {3} | AddedByID: {4} |
+                                                          Author: {5} | IsAvailable: {6} | Edition: {7} | RackNo: {8}">
+                                                <Binding Path="Id"/>
+                                                <Binding Path="Name"/>
+                                                <Binding Path="TypeOfBook"/>
+                                                <Binding Path="DateOfPurchase"/>
+                                                <Binding Path="AddedByLibrarianId"/>
+                                                <Binding Path="Author"/>
+                                                <Binding Path="IsAvailable"/>
+                                                <Binding Path="Edition"/>
+                                                <Binding Path="RackNo"/>
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                </HorizontalStackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
+
+            <!--Picker For Period Of Time For Book Assignment-->
+            <VerticalStackLayout Spacing="10" Grid.Row="1" Grid.ColumnSpan="2">
+                <Label FontSize="20" TextDecorations="Underline" 
+                       TextColor="{StaticResource Secondary}" 
+                       HorizontalOptions="Center" Text="Period Of Time"/>
+
+                <Picker HorizontalTextAlignment="Center" 
+                        TextColor="{StaticResource Secondary}" 
+                        HorizontalOptions="Center" 
+                        SelectedItem="{Binding PeriodOfTime}" 
+                        BackgroundColor="{StaticResource Tertiary}" 
+                        WidthRequest="100">
+
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Week</x:String>
+                            <x:String>Month</x:String>
+                            <x:String>Year</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+
+                </Picker>
+
+                <Button      
+                 Text="Complete Transaction"
+                 BackgroundColor="{StaticResource Quinary}"
+                 TextColor="{StaticResource Secondary}"
+                 FontAttributes="Bold"
+                 Command="{Binding CreateTransactionCommand}"
+                 HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
